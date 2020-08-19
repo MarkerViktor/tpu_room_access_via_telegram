@@ -2,7 +2,8 @@ from datetime import datetime
 
 from pony.orm import *
 
-from room_access.app import db
+
+db = Database()
 
 
 class User(db.Entity):

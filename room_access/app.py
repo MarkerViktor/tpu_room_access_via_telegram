@@ -4,6 +4,7 @@ from aiogram import Bot, Dispatcher
 from pony.orm import Database
 
 from room_access import config
+from room_access import entities
 
 
 # Настройка логирования
@@ -17,18 +18,12 @@ bot = Bot(token=config.TG_TOKEN)
 dp = Dispatcher(bot)
 
 # Импорт обработчиков команд
-from room_access.controllers import UserController
+from room_access.controllers import user_controller
 
 
 # Инициализация БД
-db = Database()
-db.bind(provider='sqlite', filename=config.DB_PATH)
-
-# Импорт сущностей
-from room_access import entities
-
-
-db.generate_mapping()
+entities.db.bind(provider='sqlite', filename=config.DB_PATH)
+entities.db.generate_mapping()
 
 
 
