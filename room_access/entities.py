@@ -1,9 +1,9 @@
 from datetime import datetime
+
 from pony.orm import *
 
-from room_access.config import DB_LOCATION
+from room_access.app import db
 
-db = Database()
 
 class User(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -44,7 +44,5 @@ class Visit(db.Entity):
     visited_room = Required('Room')
     visitor = Required('User')
 
-def connect_db():
-    db.bind(provider='sqlite', filename=DB_LOCATION)
-    db.generate_mapping()
-    return db
+
+

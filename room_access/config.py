@@ -1,5 +1,7 @@
 import os
 
-DB_LOCATION = os.environ.get('DB_LOCATION', './database.sqlite')
-TG_TOKEN = os.environ.get('TG_TOKEN', '1308859369:AAFCLsSHKGvTto24mNedAmWhHJRiPxwiV4M')
+DB_PATH = os.environ.get('DB_PATH')
+LOG_PATH = os.environ.get('LOG_PATH')
+TG_TOKEN = os.environ.get('TG_TOKEN')
+
 
