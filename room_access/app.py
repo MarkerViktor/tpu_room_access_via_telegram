@@ -1,7 +1,7 @@
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
-from aiogram import Bot, Dispatcher
-from pony.orm import Database
+from telebot import TeleBot
 
 from room_access import config
 from room_access import entities
@@ -13,9 +13,12 @@ logging.basicConfig(
     level=logging.DEBUG,
 )
 
-# Инициализация сущностей бота и диспетчера
-bot = Bot(token=config.TG_TOKEN)
-dp = Dispatcher(bot)
+# Инициализация сущностей бота
+bot = TeleBot(
+    token=config.TG_TOKEN,
+    threaded=True,
+    num_threads=2
+)
 
 # Импорт обработчиков команд
 from room_access.controllers import user_controller

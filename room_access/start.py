@@ -1,7 +1,4 @@
-from aiogram import executor
-
-from room_access.app import dp
-
+from room_access.app import bot
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    bot.polling()

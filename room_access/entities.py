@@ -5,6 +5,7 @@ from pony.orm import *
 
 db = Database()
 
+sql_debug(True)
 
 class User(db.Entity):
     """Пользователь системы контроля доступа"""
@@ -33,7 +34,7 @@ class Visit(db.Entity):
 
 class Admin(db.Entity):
     """Администратор помещений"""
-    telegram_username = Required(str)  # имя пользователя администратора в телеграм
+    telegram_username = PrimaryKey(str)  # имя пользователя администратора в телеграм
     managed_rooms = Set(Room)  # Помещения, доступом в которые имеет право управлять данный администратор
 
 
