@@ -18,7 +18,8 @@ class User(db.Entity):
 
 class Room(db.Entity):
     """Помещение, в котором контролируется доступ"""
-    location = PrimaryKey(str)  # Местоположение помещения
+    id = PrimaryKey(int, auto=True)
+    location = Required(str)  # Местоположение помещения
     visits = Set('Visit')  # Посещения помещения
     allowed_users = Set(User)  # Пользователи, которым разрешен доступ к помещению
     admins = Set('Admin')  # Администраторы, имеющие право управлять доступом в данном помещении
@@ -34,8 +35,16 @@ class Visit(db.Entity):
 
 class Admin(db.Entity):
     """Администратор помещений"""
-    telegram_username = PrimaryKey(str)  # имя пользователя администратора в телеграм
+    id = PrimaryKey(int)
+    telegram_username = Required(str)  # имя пользователя администратора в телеграм
     managed_rooms = Set(Room)  # Помещения, доступом в которые имеет право управлять данный администратор
+
+
+if __name__ == '__main__':
+    db.bind(provider='sqlite',
+            filename='C:/Users/markerviktor/Desktop/tpu_room_access_via_telegram/db.sqlite',
+            create_db=True)
+    db.generate_mapping(create_tables=True)
 
 
 
