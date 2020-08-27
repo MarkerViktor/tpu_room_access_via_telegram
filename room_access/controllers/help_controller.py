@@ -3,7 +3,7 @@ from telebot.types import Message
 from room_access.app import bot
 
 
-@bot.message_handler(commands=['help'])
+@bot.message_handler(commands=['help', 'start'])
 def bot_help(message: Message):
     """Справочная информация о командах"""
     help_text = '<b>Подробнее о командах:</b>'
