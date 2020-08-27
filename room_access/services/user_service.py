@@ -1,24 +1,15 @@
 from collections import namedtuple
 from typing import Tuple
 
-from pony.orm import select, db_session
+from pony.orm import select, db_session, ObjectNotFound
 
 from room_access.entities import User
+from room_access import exceptions
 from room_access.utils import prepare_command_args
 
 
-class UserAlreadyExist(Exception):
-    """Попытка создать пользователя, который уже существует"""
-    pass
-
-class BadUserCreatingParams(Exception):
-    """Проблема с параметрами запроса создания пользователя"""
-    pass
-
-class BadUserCreatingParamsTypes(BadUserCreatingParams):
-    """Проблема с типом параметров запроса создания пользователя"""
-    pass
-
+UserShortInfo = namedtuple(typename='UserShortInfo',
+                           field_names=('id', 'first_name', 'last_name'))
 
 @db_session
 def create_user_entity(first_name: str, last_name: str) -> User:
@@ -27,27 +18,40 @@ def create_user_entity(first_name: str, last_name: str) -> User:
     if old_user is None:
         return User(first_name=first_name, last_name=last_name)
     else:
-        raise UserAlreadyExist(f'User with such combination of first and last names'
+        raise exceptions.AlreadyExist(f'User with such combination of first and last names'
                                f' ({last_name} {first_name}) is already exist!')
 
 def new_user(command_string: str) -> None:
     """Создание нового пользователя"""
-    args: tuple = prepare_command_args(command_string)
-
+    args: tuple = prepare_command_args(command_string)  # (last_name, first_name)
     try:
         create_user_entity(first_name=args[1], last_name=args[0])
     except TypeError:
-        raise BadUserCreatingParamsTypes
+        raise exceptions.BadArgType()
     except IndexError:
-        raise BadUserCreatingParams
+        raise exceptions.BadNumberOfArgs()
 
 
-def delete_user(command_string: str):
-    args: tuple = prepare_command_args(command_string)
+@db_session
+def delete_user(command_string: str) -> UserShortInfo:
+    """Удаление пользователя и получение информации о нем"""
+    args: tuple = prepare_command_args(command_string)  # (user_id)
 
+    try:
+        user_id = args[0]
+    except IndexError:
+        raise exceptions.BadNumberOfArgs()
 
-UserShortInfo = namedtuple(typename='UserShortInfo',
-                           field_names=('id', 'first_name', 'last_name'))
+    try:
+        user = User[user_id]
+    except ObjectNotFound:
+        raise exceptions.NotExist()
+
+    user_info = UserShortInfo(None, user.first_name, user.last_name)
+    user.delete()
+
+    return user_info
+
 
 @db_session
 def users_list() -> Tuple[UserShortInfo]:
