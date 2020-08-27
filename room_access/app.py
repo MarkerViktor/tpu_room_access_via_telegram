@@ -9,9 +9,10 @@ from room_access import entities
 
 # Настройка логирования
 logging.basicConfig(
-    filename=config.LOG_PATH,
+    #filename=config.LOG_PATH,
     level=logging.DEBUG,
 )
+
 
 # Инициализация сущностей бота
 bot = TeleBot(
@@ -22,6 +23,7 @@ bot = TeleBot(
 
 # Импорт обработчиков команд
 from room_access.controllers import user_controller
+from room_access.controllers import help_controller
 
 
 # Инициализация БД
