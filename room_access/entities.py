@@ -35,7 +35,7 @@ class Visit(db.Entity):
 
 class Admin(db.Entity):
     """Администратор помещений"""
-    id = PrimaryKey(int)
+    id = PrimaryKey(int, auto=True)
     telegram_username = Required(str)  # имя пользователя администратора в телеграм
     managed_rooms = Set(Room)  # Помещения, доступом в которые имеет право управлять данный администратор
 
