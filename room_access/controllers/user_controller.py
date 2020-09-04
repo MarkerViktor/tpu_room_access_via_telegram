@@ -3,7 +3,7 @@ from telebot import types
 from room_access.app import bot
 from room_access.services import user_service
 from room_access import exceptions
-from room_access.utils import admin_required
+from room_access.controllers.utils import admin_required
 
 
 @bot.message_handler(commands=['users_list'])

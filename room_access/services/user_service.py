@@ -3,64 +3,57 @@ from typing import Tuple
 
 from pony.orm import select, db_session, ObjectNotFound
 
-from room_access.entities import User
-from room_access import exceptions
 from room_access.utils import prepare_command_args
+from room_access import exceptions
+
+from room_access.repositories import user_repository
 
 
 UserShortInfo = namedtuple(typename='UserShortInfo',
                            field_names=('id', 'first_name', 'last_name'))
 
-@db_session
-def create_user_entity(first_name: str, last_name: str) -> User:
-    """Добавляет в БД нового пользователя"""
-    old_user = User.get(first_name=first_name, last_name=last_name)
-    if old_user is None:
-        return User(first_name=first_name, last_name=last_name)
-    else:
-        raise exceptions.AlreadyExist(f'User with such combination of first and last names'
-                               f' ({last_name} {first_name}) is already exist!')
-
 def new_user(command_string: str) -> None:
     """Создание нового пользователя"""
     args: tuple = prepare_command_args(command_string)  # (last_name, first_name)
+
     try:
-        create_user_entity(first_name=args[1], last_name=args[0])
-    except TypeError:
-        raise exceptions.BadArgType()
-    except IndexError:
+        last_name, first_name = args
+    except ValueError:
         raise exceptions.BadNumberOfArgs()
 
+    try:
+        user_repository.create_user_entity(first_name, last_name)
+    except TypeError:
+        raise exceptions.BadArgType()
 
-@db_session
+
 def delete_user(command_string: str) -> UserShortInfo:
     """Удаление пользователя и получение информации о нем"""
     args: tuple = prepare_command_args(command_string)  # (user_id)
-
     try:
         user_id = args[0]
     except IndexError:
         raise exceptions.BadNumberOfArgs()
 
     try:
-        user = User[user_id]
+        user = user_repository.get_user_by_id(user_id)
     except ObjectNotFound:
         raise exceptions.NotExist()
-
     user_info = UserShortInfo(None, user.first_name, user.last_name)
-    user.delete()
 
+    user_repository.delete_user_by_id(user_id)
     return user_info
 
 
-@db_session
 def users_list() -> Tuple[UserShortInfo]:
     """
     Получение информации обо всех пользователях
     в виде namedtuple с атрибутами id, first_name, last_name
     """
-    users = select((user.id, user.first_name, user.last_name) for user in User)[:]
-    return tuple(map(lambda user: UserShortInfo(*user), users))
+    users = user_repository.get_all_users()
+    return tuple(map(lambda user: UserShortInfo(last_name=user.last_name,
+                                                first_name=user.first_name,
+                                                id=user.id), users))
 
 
 if __name__ == '__main__':
