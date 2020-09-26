@@ -1,16 +1,20 @@
+from room_access.base_exception import BaseProjectException
 
-
-class BaseServiceException(Exception):
+class BaseServiceException(BaseProjectException):
     """Базовое исключение"""
     pass
 
 
 #  Параметры команд
-class BadNumberOfArgs(BaseServiceException):
+
+class BadArgs(BaseException):
+    """Проблема с параметрами команды"""
+
+class BadNumberOfArgs(BadArgs):
     """Неверное количество аргументов"""
     pass
 
-class BadArgType(BaseServiceException):
+class BadArgsTypes(BadArgs):
     """Неверный тип аргумента"""
     pass
 

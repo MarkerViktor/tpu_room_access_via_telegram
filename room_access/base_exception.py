@@ -1,0 +1,3 @@
+
+class BaseProjectException(Exception):
+    pass

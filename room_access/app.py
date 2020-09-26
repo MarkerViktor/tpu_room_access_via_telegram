@@ -24,6 +24,8 @@ bot = TeleBot(
 # Импорт обработчиков команд
 from room_access.controllers import user_controller
 from room_access.controllers import help_controller
+from room_access.controllers import admin_controller
+from room_access.controllers import room_controller
 
 
 # Инициализация БД
