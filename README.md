@@ -2,9 +2,6 @@
 
 Общая информация о модуле системы контроля доступа расположена в файле [«Общая информация.pdf»](https://github.com/MarkerViktor/tpu_room_access_via_telegram/blob/master/Общая%20информация.pdf)
 
-Архитектура модулей системы контроля доступа:
-![Архитектура](https://github.com/MarkerViktor/tpu_room_access_via_telegram/blob/master/Архитектура%20системы%20контроля%20доступа.png)
-
 ### Команды бота: ###
 
 ##### Пользователи #####
