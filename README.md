@@ -1,4 +1,6 @@
-# Face Recognition BOT #
+# Room Access BOT #
+
+Общая информация проекта расположена в файле [«Общая информация.pdf»](https://github.com/MarkerViktor/tpu_room_access_via_telegram/blob/master/Общая%20информация.pdf)
 
 ### Команды бота: ###
 
