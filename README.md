@@ -1,6 +1,7 @@
 # Room Access BOT #
 
 Общая информация о модуле системы контроля доступа расположена в файле [«Общая информация.pdf»](https://github.com/MarkerViktor/tpu_room_access_via_telegram/blob/master/Общая%20информация.pdf)
+Репозиторий всего проекта: https://github.com/MarkerViktor/AccessControlSystem/tree/master/main
 
 ### Команды бота: ###
 
